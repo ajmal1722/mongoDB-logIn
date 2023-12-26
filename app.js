@@ -20,6 +20,10 @@ app.set('view engine', 'ejs');
 
 app.get('/', (req, res) => {
     res.render('index');
+});
+
+app.post('/logIn', (req, res) => {
+    res.send('heloo')
 })
 
 app.listen(PORT, () => {
