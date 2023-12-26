@@ -19,9 +19,9 @@ app.use(bodyParser.urlencoded({extended:true}));
 app.set('view engine', 'ejs');
 
 app.get('/', (req, res) => {
-    res.send('crud app using mongoDB')
+    res.render('index');
 })
 
 app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`)
+    console.log(`Server is running on http://localhost:${PORT}`);
 })
