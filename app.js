@@ -27,6 +27,12 @@ app.get('/signUp', (req, res) =>{
     res.render('signUp');
 })
 
+// send sign up datas to mongodb server
+app.post('/signUp', (req, res) => {
+    console.log(req.body);
+    res.send('sign up completed');
+}) 
+
 // Back to log in page
 app.get('/logIn', (req, res) => {
     res.render('signIn')
