@@ -19,10 +19,17 @@ app.use(bodyParser.urlencoded({extended:true}));
 app.set('view engine', 'ejs');
 
 app.get('/', (req, res) => {
-    res.render('index');
+    res.render('signIn');
 });
 
+// sign up page
+app.get('/signUp', (req, res) =>{
+    res.send('created new account')
+})
+
+// log In page
 app.post('/logIn', (req, res) => {
+    console.log(req.body)
     res.send('heloo')
 })
 
