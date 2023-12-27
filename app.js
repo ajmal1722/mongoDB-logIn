@@ -24,10 +24,14 @@ app.get('/', (req, res) => {
 
 // sign up page
 app.get('/signUp', (req, res) =>{
-    res.send('created new account')
+    res.render('signUp');
 })
 
-// log In page
+// Back to log in page
+app.get('/logIn', (req, res) => {
+    res.render('signIn')
+})
+// log In page datas sending to mongodb server
 app.post('/logIn', (req, res) => {
     console.log(req.body)
     res.send('heloo')
