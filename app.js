@@ -44,11 +44,27 @@ app.post('/signUp', async (req, res) => {
 app.get('/logIn', (req, res) => {
     res.render('signIn')
 })
+
 // log In page datas sending to mongodb server
-app.post('/logIn', (req, res) => {
-    // console.log(req.body)
-    res.send('heloo')
-})
+app.post('/logIn', async (req, res) => {
+    try {
+        // Check if the username exists
+        const user = await collection.findOne({ name: req.body.name });
+        if (user) {
+            if (user.password === req.body.password) {
+                res.send('password is fine')
+            } else {
+                res.send('password mismatch')
+            }        
+        } else {
+            res.send('user name does not exist')
+        }   
+    } catch (error) {
+        console.error('Error during login:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
