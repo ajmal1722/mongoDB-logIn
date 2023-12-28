@@ -3,8 +3,7 @@ const dotenv = require('dotenv');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const path = require('path');
-// const { MongoClient } = require('mongodb');
-// const mongoClient = require('mongodb').MongoClient
+const collection = require('./mongodb');
 
 const app = express();
 
@@ -14,8 +13,9 @@ const PORT = process.env.PORT || 8080;
 // log requests
 app.use(morgan('tiny'));
 
-// parse request to body-parser
-app.use(bodyParser.urlencoded({extended:true}));
+// convert data into json format
+app.use(express.json())
+app.use(express.urlencoded({extended:false}));
 
 // set view engine
 app.set('view engine', 'ejs');
@@ -29,20 +29,16 @@ app.get('/signUp', (req, res) =>{
     res.render('signUp');
 })
 
-// send sign up datas to mongodb server
+// send sign up datas to mongodb
 app.post('/signUp', async (req, res) => {
-    // try {
-    //     await mongoClient.connect('mongodb://localhost:27017', (err, client) => {
-    //     if (err) {
-    //         console.log(err)
-    //     } else {
-    //         console.log('database connected')
-    //         client.db('signUpDatas').collection('user').insertOne(req.body);
-    //     }
-    // })
-    // } catch (error) {
-    //     console.log(error);
-    // }
+    const data = {
+        name: req.body.name,
+        email: req.body.email,
+        password: req.body.password
+    }
+
+    const userData = await collection.insertMany(data);
+    console.log(userData)
     res.send('sign up completed');
 }) 
 
