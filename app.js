@@ -3,6 +3,8 @@ const dotenv = require('dotenv');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const path = require('path');
+// const { MongoClient } = require('mongodb');
+// const mongoClient = require('mongodb').MongoClient
 
 const app = express();
 
@@ -28,8 +30,19 @@ app.get('/signUp', (req, res) =>{
 })
 
 // send sign up datas to mongodb server
-app.post('/signUp', (req, res) => {
-    console.log(req.body);
+app.post('/signUp', async (req, res) => {
+    // try {
+    //     await mongoClient.connect('mongodb://localhost:27017', (err, client) => {
+    //     if (err) {
+    //         console.log(err)
+    //     } else {
+    //         console.log('database connected')
+    //         client.db('signUpDatas').collection('user').insertOne(req.body);
+    //     }
+    // })
+    // } catch (error) {
+    //     console.log(error);
+    // }
     res.send('sign up completed');
 }) 
 
@@ -39,7 +52,7 @@ app.get('/logIn', (req, res) => {
 })
 // log In page datas sending to mongodb server
 app.post('/logIn', (req, res) => {
-    console.log(req.body)
+    // console.log(req.body)
     res.send('heloo')
 })
 
