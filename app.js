@@ -37,7 +37,7 @@ app.post('/signUp', async (req, res) => {
     }
 
     const userData = await collection.insertMany(data);
-    res.render('home', {username: req.body.name});
+    res.render('home', { username: req.body.name, useremail: req.body.email });
 }) 
 
 // Back to log in page
