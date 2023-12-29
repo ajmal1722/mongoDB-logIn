@@ -37,7 +37,7 @@ app.post('/signUp', async (req, res) => {
     }
 
     const userData = await collection.insertMany(data);
-    res.send('sign up completed');
+    res.render('home', {username: req.body.name});
 }) 
 
 // Back to log in page
@@ -52,7 +52,7 @@ app.post('/logIn', async (req, res) => {
         const user = await collection.findOne({ name: req.body.name });
         if (user) {
             if (user.password === req.body.password) {
-                res.send('password is fine')
+                res.render('home', {username: req.body.name});
             } else {
                 res.send('password mismatch')
             }        
