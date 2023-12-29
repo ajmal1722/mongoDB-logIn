@@ -39,8 +39,14 @@ app.post('/signUp', async (req, res) => {
         password: req.body.password
     }
 
-    const userData = await collection.insertMany(data);
-    res.render('home', {username: req.body.name, useremail: req.body.email})
+     // Insert data into the database
+     const userData = await collection.insertMany(data);
+
+     // Retrieve the user object from the database (you may need to adjust this based on your actual data structure)
+     const user = await collection.findOne({ name: req.body.name });
+
+     // Pass the 'user' object to the 'home' template
+     res.render('home', { username: req.body.name, useremail: req.body.email, user: user });
 }) 
 
 // Back to log in page
