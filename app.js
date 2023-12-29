@@ -84,7 +84,7 @@ app.delete('/delete/:id', async (req, res) => {
 
         // Check if the deletion was successful
         if (result.deletedCount === 1) {
-            res.send('User deleted successfully');
+            res.redirect('/logIn');
         } else {
             res.send('User not found or could not be deleted');
         }
