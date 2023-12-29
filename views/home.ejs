@@ -30,8 +30,8 @@
                     <p>Email: <%= useremail %></p>
                     <div class="d-flex justify-content-around">
                         <div class="">
-                            <form action="/delete">
-                                <input class="btn btn-danger" type="submit" value="Delete">
+                            <form action="/delete/<%= user._id %>?_method=DELETE" method="post">
+                                <button class="btn btn-danger" type="submit">Delete</button>
                             </form>
                         </div> 
                         <div class="">

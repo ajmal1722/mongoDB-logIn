@@ -4,6 +4,7 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const path = require('path');
 const collection = require('./mongodb');
+const methodOverride = require('method-override');
 
 const app = express();
 
@@ -15,6 +16,8 @@ app.use(morgan('tiny'));
 
 // parse request to body-parser
 app.use(bodyParser.urlencoded({extended:true}));
+
+app.use(methodOverride('_method'));
 
 // set view engine
 app.set('view engine', 'ejs');
@@ -52,7 +55,7 @@ app.post('/logIn', async (req, res) => {
         const user = await collection.findOne({ name: req.body.name });
         if (user) {
             if (user.password === req.body.password) {
-                res.render('home', {username: req.body.name, useremail: user.email});
+                res.render('home', { username: req.body.name, useremail: user.email, user: user });
             } else {
                 res.send('password mismatch')
             }        
@@ -66,9 +69,24 @@ app.post('/logIn', async (req, res) => {
 });
 
 // delete
-app.get('/delete', (req, res) => {
-    
-})
+app.delete('/delete/:id', async (req, res) => {
+    const userId = req.params.id;
+
+    try {
+        // Use deleteOne to delete a document based on its ID
+        const result = await collection.deleteOne({ _id: userId });
+
+        // Check if the deletion was successful
+        if (result.deletedCount === 1) {
+            res.send('User deleted successfully');
+        } else {
+            res.send('User not found or could not be deleted');
+        }
+    } catch (error) {
+        console.error('Error during user deletion:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
