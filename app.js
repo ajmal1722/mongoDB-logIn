@@ -65,6 +65,10 @@ app.post('/logIn', async (req, res) => {
     }
 });
 
+// delete
+app.get('/delete', (req, res) => {
+    
+})
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
