@@ -111,8 +111,21 @@ app.get('/delete/:id', async (req, res) => {
 });
 
 // when click edit button redirect it to form page with prefilled data
-app.get('/edit' , async (req, res) => {
-    res.end('hello')
+app.get('/edit/:id' , async (req, res) => {
+    const userId = req.params.id;
+    console.log(userId)
+    try {
+        const user = await collection.findOne({ _id: userId });
+
+        if (user) {
+            res.render('editForm', { user, errorMessage: '' });
+        } else {
+            res.send('User not found');
+        }
+    } catch (error) {
+        console.error('Error during edit:', error);
+        res.status(500).send('Internal Server Error');
+    }
 })
 
 app.listen(PORT, () => {
