@@ -23,7 +23,7 @@ app.use(methodOverride('_method'));
 app.set('view engine', 'ejs');
 
 app.get('/', (req, res) => {
-    res.render('signIn');
+    res.render('signIn', { errorMessage: ''});
 });
 
 // to view sign up page
@@ -56,8 +56,9 @@ app.post('/signUp', async (req, res) => {
         // Retrieve the user object from the database
         const user = await collection.findOne({ name: req.body.name });
 
-        // Pass the 'user' object to the 'home' template
-        res.render('home', { username: req.body.name, useremail: req.body.email, user: user });
+        // Render the 'home' template with the 'errorMessage' variable
+        res.render('home', { username: req.body.name, useremail: req.body.email, user: user, errorMessage: '' });
+
     } catch (error) {
         console.error('Error during signup:', error);
         res.status(500).send('Internal Server Error');
@@ -77,7 +78,7 @@ app.post('/logIn', async (req, res) => {
         const user = await collection.findOne({ name: req.body.name });
         if (user) {
             if (user.password === req.body.password) {
-                res.render('home', { username: req.body.name, useremail: user.email, user: user });
+                res.render('home', { username: req.body.name, useremail: user.email, user: user, errorMessage: ''  });
             } else {
                 res.render('signIn', { errorMessage: 'Password mismatch' });
             }
@@ -127,6 +128,27 @@ app.get('/edit/:id' , async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 })
+
+// when cancel button click redirect it to welcome page
+app.get('/welcome/:id', async (req, res) => {
+    try {
+        // Retrieve user data from the database based on the provided id
+        const userId = req.params.id;
+        const user = await collection.findOne({ _id: userId });
+
+        // Check if the user was found
+        if (user) {
+            // Render the home.ejs page with the user data
+            res.render('home', { username: user.name, useremail: user.email, user: user });
+        } else {
+            // Handle the case where the user with the provided id was not found
+            res.status(404).send('User not found');
+        }
+    } catch (error) {
+        console.error('Error during fetching user data:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
