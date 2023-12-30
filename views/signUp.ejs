@@ -39,6 +39,9 @@
                 placeholder="Full Name"
                 class="mt-3 p-2 border rounded inp"
               /><br />
+              <% if (errorMessage) { %>
+                <p style="color: red;"><%= errorMessage %></p>
+              <% } %>
               <small style="color: red" id="ageError"></small>
               <input
                 name="email"

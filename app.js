@@ -26,28 +26,44 @@ app.get('/', (req, res) => {
     res.render('signIn');
 });
 
-// sign up page
+// to view sign up page
 app.get('/signUp', (req, res) =>{
     res.render('signUp');
 })
 
 // send sign up datas to mongodb
 app.post('/signUp', async (req, res) => {
-    const data = {
-        name: req.body.name,
-        email: req.body.email,
-        password: req.body.password
+    try {
+        // Check if a user with the same name already exists
+        const existingUser = await collection.findOne({ name: req.body.name });
+
+        if (existingUser) {
+            // If a user with the same name exists, render the 'signUp' template with an error message
+            res.render('signUp', { errorMessage: 'Username already exists. Please choose a different username.' });
+            return;
+        }
+
+        // If the username is unique, proceed with inserting the data into the database
+        const data = {
+            name: req.body.name,
+            email: req.body.email,
+            password: req.body.password
+        }
+
+        // Insert data into the database
+        const userData = await collection.insertMany(data);
+
+        // Retrieve the user object from the database
+        const user = await collection.findOne({ name: req.body.name });
+
+        // Pass the 'user' object to the 'home' template
+        res.render('home', { username: req.body.name, useremail: req.body.email, user: user });
+    } catch (error) {
+        console.error('Error during signup:', error);
+        res.status(500).send('Internal Server Error');
     }
+});
 
-     // Insert data into the database
-     const userData = await collection.insertMany(data);
-
-     // Retrieve the user object from the database (you may need to adjust this based on your actual data structure)
-     const user = await collection.findOne({ name: req.body.name });
-
-     // Pass the 'user' object to the 'home' template
-     res.render('home', { username: req.body.name, useremail: req.body.email, user: user });
-}) 
 
 // Back to log in page
 app.get('/logIn', (req, res) => {
@@ -75,7 +91,7 @@ app.post('/logIn', async (req, res) => {
 });
 
 // delete
-app.delete('/delete/:id', async (req, res) => {
+app.get('/delete/:id', async (req, res) => {
     const userId = req.params.id;
 
     try {
