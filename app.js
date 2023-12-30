@@ -150,6 +150,34 @@ app.get('/welcome/:id', async (req, res) => {
     }
 });
 
+// submit edited datas to database
+app.post('/editSubmit/:id', async (req, res) => {
+    const userId = req.params.id;
+
+    try {
+        const user = await collection.findOne({ _id: userId });
+
+        if (!user) {
+            return res.status(404).send('user not found')
+        } else {
+
+            // Update the user data with the edited form data
+            user.name = req.body.name;
+            user.email = req.body.email;
+            user.password = req.body.password;
+
+        // Save the updated user data back to the database
+        await collection.updateOne({ _id: userId }, { $set: user });
+
+        // Redirect to the home page or display a success message
+        res.redirect('/welcome/' + userId);
+        }
+
+    } catch (error) {
+        console.lo(error)
+    } 
+})
+
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 })

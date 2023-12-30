@@ -33,7 +33,7 @@
       <div class="d-flex justify-content-center">
         <div class="bg-light div-bord mt-5 pb-4" style="width: 380px">
           <h2 class="pt-5">Edit datas</h2>
-          <form action="/editSubmit" method="post" onsubmit="return validateForm()">
+          <form action="/editSubmit/<%= user._id %>" method="post" onsubmit="return validateForm()">
             <div class="p-3">
               <input
                 name="name"
