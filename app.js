@@ -28,7 +28,7 @@ app.get('/', (req, res) => {
 
 // to view sign up page
 app.get('/signUp', (req, res) =>{
-    res.render('signUp');
+    res.render('signUp', { errorMessage: ''});
 })
 
 // send sign up datas to mongodb
@@ -67,8 +67,8 @@ app.post('/signUp', async (req, res) => {
 
 // Back to log in page
 app.get('/logIn', (req, res) => {
-    res.render('signIn')
-})
+    res.render('signIn', { errorMessage: '' });
+});
 
 // log In page datas sending to mongodb server
 app.post('/logIn', async (req, res) => {
@@ -79,11 +79,11 @@ app.post('/logIn', async (req, res) => {
             if (user.password === req.body.password) {
                 res.render('home', { username: req.body.name, useremail: user.email, user: user });
             } else {
-                res.send('password mismatch')
-            }        
+                res.render('signIn', { errorMessage: 'Password mismatch' });
+            }
         } else {
-            res.send('user name does not exist')
-        }   
+            res.render('signIn', { errorMessage: 'Username does not exist' });
+        }
     } catch (error) {
         console.error('Error during login:', error);
         res.status(500).send('Internal Server Error');
