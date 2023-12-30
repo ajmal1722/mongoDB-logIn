@@ -110,6 +110,11 @@ app.get('/delete/:id', async (req, res) => {
     }
 });
 
+// when click edit button redirect it to form page with prefilled data
+app.get('/edit' , async (req, res) => {
+    res.end('hello')
+})
+
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 })
